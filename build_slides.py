@@ -22,6 +22,7 @@ SCENES = [
     ("lesson", "split"),
     ("meaning", "flip"),
     ("system", "full"),
+    ("keys", "flip"),
     ("playbook", "split"),
     ("gate", "flip"),
     ("specialists", "split"),
@@ -80,11 +81,15 @@ def main():
         print(f"[build_slides] slide {sid:<12} {comp:<5} copy {len(copy):>5} chars, figure {len(figure):>6} chars, svg {n_svg} ar {ar:.2f}, table {'yes' if table else 'no'}")
         slides.append((sid, comp, copy, figure, table))
 
+    setup = re.search(r'<section class="close" id="setup">\s*(<h2>.*?</ol>)', html, re.S)
+    if not setup:
+        sys.exit("build_slides: setup list not found")
+    print(f"[build_slides] setup list {setup.group(1).count('<li>')} items")
     body = []
     body.append(TITLE)
     for sid, comp, copy, figure, table in slides:
         body.append(f'<section class="slide {comp}" id="{sid}">\n{copy}\n{figure}\n{table}\n</section>')
-    body.append(SETUP)
+    body.append(SETUP.replace('<!--SETUP-->', setup.group(1)))
     body.append(QUOTE)
 
     out = TEMPLATE.replace("/*TOKENS*/", tokens).replace("/*SHARED*/", shared).replace("<!--SLIDES-->", "\n\n".join(body))
@@ -108,12 +113,7 @@ TITLE = '''<section class="slide title" id="title">
 
 SETUP = '''<section class="slide setup" id="setup">
   <div class="copy">
-    <h2>What we set up</h2>
-    <ol>
-      <li><b>Everyone works in Claude Code inside CMUX.</b> Barbara is the hub for clients, email, meetings, tasks and Slack.</li>
-      <li><b>One playbook folder.</b> One MD per SOP. One MD per client. One exceptions log.</li>
-      <li><b>The hook and the leadership channel.</b> Exceptions in. SOP updates out. Approved in Slack. Live on the next round.</li>
-    </ol>
+    <!--SETUP-->
   </div>
 </section>'''
 
