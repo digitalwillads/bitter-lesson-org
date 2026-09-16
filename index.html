@@ -62,14 +62,9 @@
   .copy li b{color:var(--ink);font-weight:600}
 
   figure{margin:0;position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px;min-width:0}
-  .frame{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
-  figure svg{display:block;width:100%;height:auto;min-width:var(--minw,560px);font-family:inherit}
+  .frame{overflow:visible}
+  figure svg{display:block;width:100%;height:auto;font-family:inherit}
   figcaption{font-size:14px;color:var(--ink2);margin:10px 4px 0;text-wrap:pretty}
-  @media (max-width:640px){
-    .frame{position:relative}
-    .frame::after{content:"";position:absolute;top:0;right:0;bottom:0;width:40px;background:linear-gradient(to right,transparent,var(--card));pointer-events:none}
-    figcaption::before{content:"Swipe the picture sideways. ";color:var(--muted)}
-  }
   .replay{position:absolute;top:10px;right:10px;z-index:2;font:inherit;font-size:13px;font-weight:500;color:var(--ink2);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 11px;cursor:pointer;opacity:0;transition:opacity .2s}
   figure.played .replay{opacity:1}
   .replay:hover{color:var(--ink);border-color:var(--line2)}
@@ -299,7 +294,7 @@
     <p class="lede">One loop. The playbook feeds the agents. The agents feed the playbook.</p>
     <p>A cron starts the agents. They read the playbook, work through Barbara, and log every job. Exceptions become SOP updates, and leadership approves them in Slack.</p>
   </div>
-  <figure class="anim map" data-name="system" style="--minw:960px">
+  <figure class="anim map" data-name="system">
     <button class="replay" type="button">Replay</button>
     <div class="frame"><svg viewBox="0 0 1120 540" role="img" aria-label="The loop: cron starts the agents; agents read the SOP space, work through Barbara, log the work; exceptions go to a hook; the hook writes an SOP update; the leadership channel approves; the SOP space updates.">
       <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--line2)"/></marker></defs>
@@ -537,7 +532,7 @@
     <p class="lede">Several rounds a day. Each round can change the playbook by one line.</p>
     <p>A round is small: pull, work, log, propose. Nothing waits for a big release.</p>
   </div>
-  <figure class="anim" data-name="rounds" style="--minw:420px">
+  <figure class="anim" data-name="rounds">
     <button class="replay" type="button">Replay</button>
     <div class="frame"><svg viewBox="0 0 520 520" role="img" aria-label="A ring with four rounds in a day. A dot travels the ring. The playbook version in the center goes from 41 to 45.">
       <circle cx="260" cy="260" r="170" style="fill:none;stroke:var(--line2);stroke-width:2"/>
@@ -576,7 +571,7 @@
     <p class="lede">Your time goes to judgment, not to waiting.</p>
     <p>The agents run the loop. People touch it in three places.</p>
   </div>
-  <figure class="anim" data-name="people" style="--minw:640px">
+  <figure class="anim" data-name="people">
     <button class="replay" type="button">Replay</button>
     <div class="frame"><svg viewBox="0 0 760 270" role="img" aria-label="A loop track. A blue dot runs around it. Three amber points on the track: answer the brief, approve SOP updates, talk to the client.">
       <path d="M120 60 H560 A70 70 0 0 1 560 200 H120 A70 70 0 0 1 120 60 Z" style="fill:none;stroke:var(--line2);stroke-width:2"/>
