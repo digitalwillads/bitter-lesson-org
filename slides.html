@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>The Loop</title>
-<meta name="description" content="How Digital Will runs the agency as one learning loop: agents do the work, log what falls outside the SOPs, propose the update, leadership approves in Slack. The Bitter Lesson, applied.">
+<title>The Loop, slides</title>
+<meta name="description" content="Slides: how Digital Will runs the agency as one learning loop. The Bitter Lesson, applied.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* @tokens-start */
+
   :root{
     color-scheme:light;
     --bg:#f6f7f5;--card:#ffffff;--ink:#14171c;--ink2:#4b5563;--muted:#7b8494;--line:#dfe3e8;--line2:#c9cfd6;
@@ -32,50 +32,58 @@
     --blue:#5b8cff;--blue-soft:#1c2740;--amber:#cf7d12;--amber-soft:#3a2a12;--grey:#98a2ae;--grey-soft:#262a30;
     --good:#4fbf82;--good-soft:#173125;--bad:#ef6b62;--focus:#5b8cff;
   }
-  /* @tokens-end */
+  
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding:0 16px 96px;-webkit-font-smoothing:antialiased}
+  html,body{height:100%;margin:0;overflow:hidden}
+  body{background:var(--bg);color:var(--ink);font:18px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   a{color:var(--blue)}
-  a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:4px}
-  .wrap{max-width:1120px;margin:0 auto}
+  button:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 
-  /* hero */
-  .hero{padding:64px 0 24px}
-  h1{font-size:clamp(34px,5.2vw,58px);line-height:1.04;letter-spacing:-.025em;font-weight:800;margin:0 0 22px;max-width:16ch}
-  .lead{font-size:clamp(18px,2vw,22px);line-height:1.45;max-width:58ch;margin:0 0 18px;text-wrap:pretty}
-  .src{font-size:15px;color:var(--ink2);margin:0 0 34px}
-  .key{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:var(--ink2);margin:0 0 30px}
+  /* deck */
+  .deck{height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+  .slide{height:100dvh;scroll-snap-align:start;overflow:hidden;position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(24px,4vw,64px);align-items:center;padding:clamp(24px,5vh,56px) clamp(24px,6vw,96px)}
+  .slide.flip{grid-template-columns:minmax(0,8fr) minmax(0,4fr)}
+  .slide.flip .copy{order:2}
+  .slide.full{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);align-items:start;align-content:start;gap:clamp(12px,2vh,24px)}
+  .slide.full .copy{display:flex;gap:6px clamp(16px,3vw,48px);align-items:baseline;flex-wrap:wrap}
+  .slide.full .copy h2{margin:0}
+  .slide.full .copy p{margin:0}
+  .slide.full .copy p:not(.lede){display:none}
+  .slide.full{--fh:calc(100dvh - 190px)}
+  #people{grid-template-rows:auto minmax(0,1fr) auto;--fh:calc(100dvh - 420px)}
+  @media (max-width:860px){
+    .slide,.slide.flip{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);align-items:start;gap:16px;padding:20px 16px 40px}
+    .slide.flip .copy{order:0}
+  }
+
+  /* copy */
+  .copy h1{font-size:clamp(40px,6.4vw,96px);line-height:1.02;letter-spacing:-.03em;font-weight:800;margin:0 0 .35em;max-width:14ch;text-wrap:balance}
+  .copy h2{font-size:clamp(28px,3.6vw,52px);line-height:1.1;letter-spacing:-.02em;font-weight:700;margin:0 0 .5em;text-wrap:balance}
+  .copy p{margin:0 0 .7em;max-width:40ch;text-wrap:pretty}
+  .copy .lede{font-weight:600;font-size:clamp(20px,2.3vw,32px);line-height:1.3;color:var(--ink)}
+  .copy p:not(.lede){font-size:clamp(16px,1.6vw,22px);color:var(--ink2);line-height:1.5}
+  .copy .lead{font-size:clamp(20px,2.4vw,34px);color:var(--ink);font-weight:500;max-width:32ch}
+  .copy .src{font-size:clamp(14px,1.3vw,18px);color:var(--ink2)}
+  .key{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:clamp(14px,1.3vw,18px);color:var(--ink2);margin-top:1.2em}
   .key span{display:inline-flex;align-items:center;gap:8px}
-  .key i{display:inline-block;width:12px;height:12px;border-radius:50%}
+  .key i{display:inline-block;width:.8em;height:.8em;border-radius:50%}
   .key .b{background:var(--blue)}.key .a{background:var(--amber)}.key .g{background:var(--grey)}
 
-  /* scenes */
-  .scene{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:32px 48px;align-items:start;padding:64px 0 8px;border-top:1px solid var(--line)}
-  .scene.wide{grid-template-columns:1fr}
-  .scene.wide .copy{max-width:64ch}
-  @media (max-width:860px){.scene{grid-template-columns:1fr;gap:20px;padding-top:44px}}
-  h2{font-size:clamp(24px,3vw,32px);line-height:1.15;letter-spacing:-.02em;font-weight:700;margin:0 0 14px}
-  .copy p{margin:0 0 12px;max-width:52ch;text-wrap:pretty}
-  .copy .lede{font-weight:600;font-size:18px;color:var(--ink)}
-  .copy p:not(.lede){color:var(--ink2)}
-  .copy ol{margin:8px 0 0;padding-left:22px;color:var(--ink2)}
-  .copy li{margin:0 0 8px;max-width:52ch;text-wrap:pretty}
-  .copy li b{color:var(--ink);font-weight:600}
-
-  figure{margin:0;position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px;min-width:0}
-  .frame{overflow:visible}
-  figure svg{display:block;width:100%;height:auto;font-family:inherit}
-  figcaption{font-size:14px;color:var(--ink2);margin:10px 4px 0;text-wrap:pretty}
+  /* pictures */
+  .slide{--fh:calc(100dvh - 160px)} /* room for a picture: viewport minus padding, legend and caption */
+  figure{margin:0;position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:clamp(10px,1.4vw,18px);min-width:0;max-width:100%;width:fit-content;justify-self:center;display:flex;flex-direction:column}
+  .frame{min-height:0}
+  figure svg{display:block;height:auto;font-family:inherit;aspect-ratio:var(--ar);width:min(calc(100vw - 200px),calc(var(--fh) * var(--ar)))}
+  .slide.split figure svg,.slide.flip figure svg{width:min(calc((100vw - 200px) * .66),calc(var(--fh) * var(--ar)))}
+  figcaption{font-size:clamp(13px,1.2vw,17px);color:var(--ink2);margin:8px 4px 0;text-wrap:pretty;flex:none}
   .replay{position:absolute;top:10px;right:10px;z-index:2;font:inherit;font-size:13px;font-weight:500;color:var(--ink2);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 11px;cursor:pointer;opacity:0;transition:opacity .2s}
   figure.played .replay{opacity:1}
   .replay:hover{color:var(--ink);border-color:var(--line2)}
-  .legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--ink2);margin:2px 4px 10px}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:clamp(12px,1.1vw,15px);color:var(--ink2);margin:2px 4px 8px;flex:none}
   .legend span{display:inline-flex;align-items:center;gap:7px}
   .legend i{display:inline-block;width:18px;height:0;border-top:2.5px solid var(--c);border-radius:2px}
-  .legend i.dash{border-top-style:dashed}
 
-  /* @shared-start */
+
   /* svg primitives */
   svg text{fill:var(--ink)}
   svg .t{font-size:15px;font-weight:600}
@@ -194,50 +202,80 @@
   @keyframes tp2{0%,39%{transform:scale(1)}42%{transform:scale(1.3)}45%,100%{transform:scale(1)}}
   @keyframes tp3{0%,58%{transform:scale(1)}61%{transform:scale(1.3)}64%,100%{transform:scale(1)}}
 
-  /* @shared-end */
-  table{border-collapse:collapse;width:100%;font-size:15px;margin:20px 0 0;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  th,td{padding:10px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-  th{font-weight:600;color:var(--ink2);font-size:14px;background:var(--grey-soft)}
+  
+
+  /* title slide */
+  .slide.title{grid-template-columns:1fr;align-items:center}
+  .slide.title .bg{position:absolute;right:-12vmin;top:50%;transform:translateY(-50%);width:80vmin;height:80vmin;z-index:-1;opacity:.9}
+  .ringbg{fill:none;stroke:var(--line);stroke-width:2;stroke-dasharray:6 10}
+  .slide.title.play #titledot{offset-path:path("M300 50 A250 250 0 1 1 299.99 50");offset-rotate:0deg;animation:loop 14s linear infinite}
+  .slide.title #titledot{opacity:0}
+  .slide.title.play #titledot{opacity:1}
+  .slide.title .copy{max-width:min(92vw,1100px)}
+
+  /* setup and quote */
+  .slide.setup{grid-template-columns:1fr;align-items:center}
+  .slide.setup .copy{max-width:min(92vw,1000px)}
+  .slide.setup ol{margin:0;padding-left:1.2em;font-size:clamp(18px,2.2vw,30px);line-height:1.4;max-width:34ch}
+  .slide.setup li{margin:0 0 .8em;text-wrap:pretty;color:var(--ink2)}
+  .slide.setup li b{color:var(--ink);font-weight:600}
+  .slide.quote{grid-template-columns:1fr;place-items:center}
+  .slide.quote blockquote{margin:0;padding:0 0 0 clamp(18px,2vw,32px);border-left:4px solid var(--amber);max-width:26ch;font-size:clamp(26px,3.4vw,52px);line-height:1.25;letter-spacing:-.015em;font-weight:500;text-wrap:pretty}
+  .slide.quote footer{font-size:clamp(14px,1.4vw,20px);color:var(--ink2);margin-top:.8em;font-weight:400}
+
+  /* people table on its slide */
+  table{border-collapse:collapse;width:100%;font-size:clamp(13px,1.35vw,19px);background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:.45em .8em;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{font-weight:600;color:var(--ink2);background:var(--grey-soft)}
   tr:last-child td{border-bottom:0}
   td:first-child{font-weight:600;white-space:nowrap}
   td.hu{color:var(--amber);font-weight:600}
-  @media (max-width:640px){table{display:block;overflow-x:auto}}
 
-  .close{padding:64px 0 0;border-top:1px solid var(--line)}
-  .close ol{margin:0;padding-left:24px;font-size:18px;max-width:60ch}
-  .close li{margin:0 0 14px;text-wrap:pretty}
-  .close li b{font-weight:600}
-  blockquote{margin:44px 0 0;padding:0 0 0 18px;border-left:3px solid var(--amber);max-width:60ch;font-size:19px;line-height:1.45;color:var(--ink);text-wrap:pretty}
-  blockquote footer{font-size:15px;color:var(--ink2);margin-top:8px}
+  /* chrome */
+  .deck-progress{position:fixed;top:0;left:0;height:3px;background:var(--blue);z-index:100;transition:width .3s ease;pointer-events:none}
+  .deck-dots{position:fixed;right:clamp(10px,1.5vw,20px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:100}
+  .deck-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:.35;border:0;padding:0;cursor:pointer;transition:opacity .2s,transform .2s}
+  .deck-dot:hover{opacity:.7}
+  .deck-dot.active{opacity:1;transform:scale(1.5);background:var(--blue)}
+  .deck-counter{position:fixed;bottom:clamp(10px,2vh,20px);right:clamp(12px,2vw,24px);font-size:13px;color:var(--muted);z-index:100;font-variant-numeric:tabular-nums}
+  .deck-hints{position:fixed;bottom:clamp(10px,2vh,20px);left:50%;transform:translateX(-50%);font-size:13px;color:var(--muted);z-index:100;transition:opacity .5s;white-space:nowrap}
+  .deck-hints.faded{opacity:0;pointer-events:none}
+  @media (max-width:860px){.deck-dots{display:none}}
 
   @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto}
+    .deck{scroll-behavior:auto}
     .play *{animation-duration:.01ms!important;animation-delay:0ms!important;animation-iteration-count:1!important}
     .js figure.anim:not(.play) .a1,.js figure.anim:not(.play) .draw{opacity:1;stroke-dashoffset:0}
-    svg .dot,svg .sp,#trackdot,#rounddot{display:none}
+    svg .dot,svg .sp,#trackdot,#rounddot,#titledot{display:none}
     .replay{display:none}
   }
 </style>
 <noscript><style>.dot{display:none}</style></noscript>
 </head>
 <body>
-<div class="wrap">
+<div class="deck">
 
-<header class="hero">
-  <h1>Run the agency the way the labs run AI.</h1>
-  <p class="lead">The Bitter Lesson: general methods that use more compute beat hand-built rules, every time, in the long run. So we stop hand-building the agency. We build one loop that does the work and rewrites its own playbook.</p>
-  <p class="src">Rich Sutton, <a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html" target="_blank" rel="noopener">The Bitter Lesson</a>, 2019. Six paragraphs. Read it once. This page as <a href="slides.html">slides</a>.</p>
-  <div class="key" aria-label="Color key"><span><i class="b"></i>the agents work</span><span><i class="a"></i>a person decides</span><span><i class="g"></i>the old way</span></div>
-</header>
-
-<!-- 1. the lesson -->
-<section class="scene" id="lesson">
+<section class="slide title" id="title">
+  <svg class="bg" viewBox="0 0 600 600" aria-hidden="true">
+    <circle cx="300" cy="300" r="250" class="ringbg"/>
+    <circle id="titledot" class="dot" r="9"/>
+  </svg>
   <div class="copy">
+    <h1>Run the agency the way the labs run AI.</h1>
+    <p class="lead">The Bitter Lesson, applied to Digital Will.</p>
+    <p class="src">Rich Sutton, 2019. Six paragraphs. Read it once.</p>
+    <div class="key"><span><i class="b"></i>the agents work</span><span><i class="a"></i>a person decides</span><span><i class="g"></i>the old way</span></div>
+  </div>
+</section>
+
+<section class="slide split" id="lesson">
+<div class="copy">
     <h2>The lesson</h2>
     <p class="lede">Seventy years of AI. One pattern, four beats.</p>
     <p>Researchers built their own knowledge into the machine. It helped at first. Then it flattened. Search and learning on more compute won in the end, by a lot.</p>
   </div>
-  <figure class="anim" data-name="lesson">
+  
+<figure style="--ar:1.7273" class="anim" data-name="lesson">
     <button class="replay" type="button">Replay</button>
     <div class="legend"><span><i style="--c:var(--grey)"></i>rules we write by hand</span><span><i style="--c:var(--blue)"></i>general methods + more compute</span></div>
     <div class="frame"><svg viewBox="0 0 760 440" role="img" aria-label="Two curves over time. Hand-written rules rise fast and flatten. General methods start lower, cross over, and keep climbing.">
@@ -254,16 +292,17 @@
     </svg></div>
     <figcaption>Chess, Go, speech, vision. The same four beats each time.</figcaption>
   </figure>
+
 </section>
 
-<!-- 2. what it means for us -->
-<section class="scene" id="meaning">
-  <div class="copy">
+<section class="slide flip" id="meaning">
+<div class="copy">
     <h2>What it means for us</h2>
     <p class="lede">Do not build our know-how into the machine. Build the machine that finds it.</p>
     <p>Every rebuild takes the system offline for weeks. A loop never goes offline. It gets one line better each round.</p>
   </div>
-  <figure class="anim" data-name="meaning">
+  
+<figure style="--ar:1.7273" class="anim" data-name="meaning">
     <button class="replay" type="button">Replay</button>
     <div class="frame"><svg viewBox="0 0 760 440" role="img" aria-label="Top: a sawtooth line that rises, drops to offline, and restarts, four times. Bottom: a staircase that rises steadily.">
       <text class="t" x="40" y="34" style="fill:var(--grey)">Rebuild it every few weeks</text>
@@ -289,16 +328,17 @@
     </svg></div>
     <figcaption>Same twelve weeks. The loop is ahead by week four and never falls back.</figcaption>
   </figure>
+
 </section>
 
-<!-- 3. the whole system -->
-<section class="scene wide" id="system">
-  <div class="copy">
+<section class="slide full" id="system">
+<div class="copy">
     <h2>The whole system</h2>
     <p class="lede">One loop. The playbook feeds the agents. The agents feed the playbook.</p>
     <p>A cron starts the agents. They read the playbook, work through Barbara, and log every job. Exceptions become SOP updates, and leadership approves them in Slack.</p>
   </div>
-  <figure class="anim map" data-name="system">
+  
+<figure style="--ar:2.0741" class="anim map" data-name="system">
     <button class="replay" type="button">Replay</button>
     <div class="frame"><svg viewBox="0 0 1120 540" role="img" aria-label="The loop: cron starts the agents; agents read the SOP space, work through Barbara, log the work; exceptions go to a hook; the hook writes an SOP update; the leadership channel approves; the SOP space updates.">
       <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--line2)"/></marker></defs>
@@ -372,16 +412,17 @@
     </svg></div>
     <figcaption>Follow the dot. Blue is the agents at work. It turns amber where a person approves, and the playbook flashes when the update lands.</figcaption>
   </figure>
+
 </section>
 
-<!-- 4. the playbook -->
-<section class="scene" id="playbook">
-  <div class="copy">
+<section class="slide split" id="playbook">
+<div class="copy">
     <h2>The playbook</h2>
     <p class="lede">Plain text files. One per SOP. One per client.</p>
     <p>The agents read them before every job. When a job falls outside them, the agent writes one line to the exceptions log. The hook turns that line into a change to the file.</p>
   </div>
-  <figure class="anim" data-name="playbook">
+  
+<figure style="--ar:1.7273" class="anim" data-name="playbook">
     <button class="replay" type="button">Replay</button>
     <div class="frame"><svg viewBox="0 0 760 440" role="img" aria-label="A folder tree of SOP and client text files. A new line lands in the exceptions log. The hook changes one line in conversion-tracking.md and the version goes from 14 to 15.">
       <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--line2)"/></marker></defs>
@@ -433,16 +474,17 @@
     </svg></div>
     <figcaption>One exception in. One line changed. Version 14 becomes 15.</figcaption>
   </figure>
+
 </section>
 
-<!-- 5. the approval gate -->
-<section class="scene" id="gate">
-  <div class="copy">
+<section class="slide flip" id="gate">
+<div class="copy">
     <h2>The approval gate</h2>
     <p class="lede">People approve the rules, not the work.</p>
     <p>The proposal lands in the leadership channel. Approve, and it is live in the next round. Send it back with a note, and the note goes into the next proposal.</p>
   </div>
-  <figure class="anim" data-name="gate">
+  
+<figure style="--ar:1.7273" class="anim" data-name="gate">
     <button class="replay" type="button">Replay</button>
     <div class="frame"><svg viewBox="0 0 760 440" role="img" aria-label="A message in the leadership channel with a one-line SOP change and two buttons. A cursor presses Approve. On the right, a marker moves from proposed to approved to live.">
       <!-- card -->
@@ -479,16 +521,17 @@
     </svg></div>
     <figcaption>One tap in Slack. No meeting. The change is live on the next round.</figcaption>
   </figure>
+
 </section>
 
-<!-- 6. specialists -->
-<section class="scene" id="specialists">
-  <div class="copy">
+<section class="slide split" id="specialists">
+<div class="copy">
     <h2>Specialists for hard jobs</h2>
     <p class="lede">One general agent for routine work. A named specialist for each hard job.</p>
     <p>A specialist has its own tools, its own SOPs and its own tests. Conversion tracking is the first. Ads pushes and client reports come next.</p>
   </div>
-  <figure class="anim" data-name="specialists">
+  
+<figure style="--ar:1.7273" class="anim" data-name="specialists">
     <button class="replay" type="button">Replay</button>
     <div class="frame"><svg viewBox="0 0 760 440" role="img" aria-label="Routine jobs feed one general agent. A hard job, set up tracking for a new client, moves to the conversion tracking specialist, which lights up.">
       <!-- routine spokes -->
@@ -527,16 +570,17 @@
     </svg></div>
     <figcaption>Routine jobs stay with the general agent. The hard one moves to the specialist that owns it.</figcaption>
   </figure>
+
 </section>
 
-<!-- 7. rounds -->
-<section class="scene" id="rounds">
-  <div class="copy">
+<section class="slide flip" id="rounds">
+<div class="copy">
     <h2>Rounds, not releases</h2>
     <p class="lede">Several rounds a day. Each round can change the playbook by one line.</p>
     <p>A round is small: pull, work, log, propose. Nothing waits for a big release.</p>
   </div>
-  <figure class="anim" data-name="rounds">
+  
+<figure style="--ar:1.0000" class="anim" data-name="rounds">
     <button class="replay" type="button">Replay</button>
     <div class="frame"><svg viewBox="0 0 520 520" role="img" aria-label="A ring with four rounds in a day. A dot travels the ring. The playbook version in the center goes from 41 to 45.">
       <circle cx="260" cy="260" r="170" style="fill:none;stroke:var(--line2);stroke-width:2"/>
@@ -566,16 +610,17 @@
     </svg></div>
     <figcaption>One day. Four rounds. Four small changes, each one approved.</figcaption>
   </figure>
+
 </section>
 
-<!-- 8. people -->
-<section class="scene wide" id="people">
-  <div class="copy">
+<section class="slide full" id="people">
+<div class="copy">
     <h2>Where people sit</h2>
     <p class="lede">Your time goes to judgment, not to waiting.</p>
     <p>The agents run the loop. People touch it in three places.</p>
   </div>
-  <figure class="anim" data-name="people">
+  
+<figure style="--ar:2.8148" class="anim" data-name="people">
     <button class="replay" type="button">Replay</button>
     <div class="frame"><svg viewBox="0 0 760 270" role="img" aria-label="A loop track. A blue dot runs around it. Three amber points on the track: answer the brief, approve SOP updates, talk to the client.">
       <path d="M120 60 H560 A70 70 0 0 1 560 200 H120 A70 70 0 0 1 120 60 Z" style="fill:none;stroke:var(--line2);stroke-width:2"/>
@@ -594,7 +639,7 @@
       <circle id="trackdot" class="dot" r="7"/>
     </svg></div>
   </figure>
-  <table style="grid-column:1/-1">
+<table>
     <thead><tr><th>Who</th><th>Decides</th><th>Leaves to the agents</th></tr></thead>
     <tbody>
       <tr><td class="hu">Will</td><td>budgets, every outward send, the rules</td><td>the pull, the numbers, the drafts</td></tr>
@@ -605,14 +650,14 @@
   </table>
 </section>
 
-<!-- 9. why it compounds -->
-<section class="scene" id="compounds">
-  <div class="copy">
+<section class="slide split" id="compounds">
+<div class="copy">
     <h2>Why it compounds</h2>
     <p class="lede">Our layer is text files and loops, not custom code.</p>
     <p>The labs ship a better model every few months. The new model reads the same playbook on day one. The whole agency gets better the same day, for free.</p>
   </div>
-  <figure class="anim" data-name="compounds">
+  
+<figure style="--ar:1.8095" class="anim" data-name="compounds">
     <button class="replay" type="button">Replay</button>
     <div class="legend"><span><i style="--c:var(--ink)"></i>the labs' models</span><span><i style="--c:var(--blue)"></i>our agency, same day</span><span><i style="--c:var(--grey)"></i>custom code, frozen at build</span></div>
     <div class="frame"><svg viewBox="0 0 760 420" role="img" aria-label="A staircase for model releases rising over time. Our agency rises with each step, one day behind. Custom code rises once and stays flat.">
@@ -630,16 +675,21 @@
     </svg></div>
     <figcaption>What the labs do will always be more than we can do. We ride it instead of racing it.</figcaption>
   </figure>
+
 </section>
 
-<!-- 10. what we set up -->
-<section class="close" id="setup">
-  <h2>What we set up</h2>
-  <ol>
-    <li><b>Everyone works in Claude Code inside CMUX.</b> Barbara is the hub for clients, email, meetings, tasks and Slack.</li>
-    <li><b>One playbook folder.</b> One MD per SOP. One MD per client. One exceptions log.</li>
-    <li><b>The hook and the leadership channel.</b> Exceptions in. SOP updates out. Approved in Slack. Live on the next round.</li>
-  </ol>
+<section class="slide setup" id="setup">
+  <div class="copy">
+    <h2>What we set up</h2>
+    <ol>
+      <li><b>Everyone works in Claude Code inside CMUX.</b> Barbara is the hub for clients, email, meetings, tasks and Slack.</li>
+      <li><b>One playbook folder.</b> One MD per SOP. One MD per client. One exceptions log.</li>
+      <li><b>The hook and the leadership channel.</b> Exceptions in. SOP updates out. Approved in Slack. Live on the next round.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide quote" id="quote">
   <blockquote>We want AI agents that can discover like we can, not which contain what we have discovered.<footer>Rich Sutton, The Bitter Lesson</footer></blockquote>
 </section>
 
@@ -648,32 +698,95 @@
 (function(){
   document.documentElement.classList.add('js');
   var t0 = performance.now();
-  var figs = document.querySelectorAll('figure.anim');
-  console.log('[loop] init', figs.length, 'scenes');
+  var deck = document.querySelector('.deck');
+  var slides = [].slice.call(document.querySelectorAll('.slide'));
+  var current = 0;
+  console.log('[slides] init', slides.length, 'slides');
 
   function play(f, why){
     f.classList.remove('play');
-    void f.offsetWidth; // restart every animation
+    void f.offsetWidth;
     f.classList.add('play');
     f.classList.add('played');
-    console.log('[loop] play', f.dataset.name, why, Math.round(performance.now()-t0)+'ms');
+    console.log('[slides] play', f.id || f.dataset.name, why, Math.round(performance.now()-t0)+'ms');
+  }
+  function playSlide(s, why){
+    if (s.classList.contains('title')) play(s, why);
+    var f = s.querySelector('figure.anim');
+    if (f) play(f, why);
   }
 
-  if ('IntersectionObserver' in window){
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if (e.isIntersecting){ play(e.target, 'scroll'); io.unobserve(e.target); }
-      });
-    }, {threshold:.4});
-    figs.forEach(function(f){ io.observe(f); });
-  } else {
-    figs.forEach(function(f){ play(f, 'no-observer'); });
-  }
-
-  figs.forEach(function(f){
-    var b = f.querySelector('.replay');
-    if (b) b.addEventListener('click', function(){ play(f, 'replay'); });
+  // chrome
+  var bar = document.createElement('div'); bar.className = 'deck-progress'; document.body.appendChild(bar);
+  var dots = document.createElement('div'); dots.className = 'deck-dots';
+  slides.forEach(function(s, i){
+    var d = document.createElement('button'); d.className = 'deck-dot'; d.type = 'button';
+    d.title = 'Slide ' + (i+1) + ': ' + (s.querySelector('h1,h2,blockquote') || {textContent:''}).textContent.trim().slice(0,60);
+    d.addEventListener('click', function(){ goTo(i); });
+    dots.appendChild(d);
   });
+  document.body.appendChild(dots);
+  var dotEls = [].slice.call(dots.children);
+  var counter = document.createElement('div'); counter.className = 'deck-counter'; document.body.appendChild(counter);
+  var hints = document.createElement('div'); hints.className = 'deck-hints'; hints.textContent = '← → to move, r to replay, f for full screen'; document.body.appendChild(hints);
+  var hintTimer = setTimeout(function(){ hints.classList.add('faded'); }, 5000);
+  function fadeHints(){ clearTimeout(hintTimer); hints.classList.add('faded'); }
+
+  function update(){
+    bar.style.width = ((current+1)/slides.length*100) + '%';
+    dotEls.forEach(function(d, i){ d.classList.toggle('active', i === current); });
+    counter.textContent = (current+1) + ' / ' + slides.length;
+    try { history.replaceState(null, '', '#' + (slides[current].id || (current+1))); } catch(e){}
+  }
+  function goTo(i){
+    i = Math.max(0, Math.min(i, slides.length-1));
+    slides[i].scrollIntoView({behavior:'smooth'});
+    console.log('[slides] goTo', i+1, slides[i].id);
+  }
+  function next(){ goTo(current+1); }
+  function prev(){ goTo(current-1); }
+
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.target.closest('input, textarea, [contenteditable]')) return;
+    if (['ArrowDown','ArrowRight',' ','PageDown'].indexOf(e.key) >= 0){ e.preventDefault(); next(); }
+    else if (['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key) >= 0){ e.preventDefault(); prev(); }
+    else if (e.key === 'Home'){ e.preventDefault(); goTo(0); }
+    else if (e.key === 'End'){ e.preventDefault(); goTo(slides.length-1); }
+    else if (e.key === 'r'){ playSlide(slides[current], 'key'); }
+    else if (e.key === 'f'){
+      if (document.fullscreenElement) document.exitFullscreen && document.exitFullscreen();
+      else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+      else if (document.documentElement.webkitRequestFullscreen) document.documentElement.webkitRequestFullscreen();
+    }
+    else return;
+    fadeHints();
+  });
+  var touchY;
+  deck.addEventListener('touchstart', function(e){ touchY = e.touches[0].clientY; }, {passive:true});
+  deck.addEventListener('touchend', function(e){ var dy = touchY - e.changedTouches[0].clientY; if (Math.abs(dy) > 50){ dy > 0 ? next() : prev(); } });
+
+  // a slide plays its picture every time it comes into view
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var i = slides.indexOf(e.target);
+      if (e.isIntersecting){ current = i; update(); playSlide(e.target, 'enter'); }
+    });
+  }, {threshold:.6});
+  slides.forEach(function(s){ io.observe(s); });
+
+  slides.forEach(function(s){
+    var b = s.querySelector('.replay');
+    if (b) b.addEventListener('click', function(){ playSlide(s, 'replay'); });
+  });
+
+  // deep link: #playbook or ?slide=4
+  var want = -1;
+  var q = new URLSearchParams(location.search).get('slide');
+  if (q) want = parseInt(q, 10) - 1;
+  else if (location.hash) want = slides.findIndex(function(s){ return '#' + s.id === location.hash; });
+  if (want > 0){ deck.style.scrollBehavior = 'auto'; slides[want].scrollIntoView(); deck.style.scrollBehavior = ''; console.log('[slides] deep link to', want+1); }
+  update();
 })();
 </script>
 </body>
