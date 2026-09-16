@@ -124,7 +124,10 @@
   /* scene 3: the map */
   .map .dot{offset-rotate:0deg}
   .play.map .dot{animation-duration:7s;animation-timing-function:linear;animation-iteration-count:infinite;animation-delay:.6s}
-  .play.map #d1{offset-path:path("M212 265 L318 265");animation-name:m1}
+  .play.map #d1{offset-path:path("M210 170 L318 236");animation-name:m1}
+  .play.map #p1{offset-path:path("M212 265 L318 265");animation-name:m1}
+  .play.map #p2{offset-path:path("M322 460 L125 460 L125 316");animation-name:mp2}
+  .play.map #p3{offset-path:path("M212 265 L318 265");animation-name:mp3}
   .play.map #d2{offset-path:path("M470 122 L470 214");animation-name:m1}
   .play.map #d3{offset-path:path("M612 253 L690 253");animation-name:m3}
   .play.map #d3b{offset-path:path("M698 277 L620 277");animation-name:m3b}
@@ -137,6 +140,8 @@
   @keyframes m3{0%,14%{offset-distance:0%;opacity:0}16%{opacity:1}24%{offset-distance:100%;opacity:1}25%,100%{offset-distance:100%;opacity:0}}
   @keyframes m3b{0%,26%{offset-distance:0%;opacity:0}28%{opacity:1}36%{offset-distance:100%;opacity:1}37%,100%{offset-distance:100%;opacity:0}}
   @keyframes m4{0%,38%{offset-distance:0%;opacity:0}40%{opacity:1}48%{offset-distance:100%;opacity:1}49%,100%{offset-distance:100%;opacity:0}}
+  @keyframes mp2{0%,50%{offset-distance:0%;opacity:0}52%{opacity:1}62%{offset-distance:100%;opacity:1}63%,100%{offset-distance:100%;opacity:0}}
+  @keyframes mp3{0%,64%{offset-distance:0%;opacity:0}65%{opacity:1}72%{offset-distance:100%;opacity:1}73%,100%{offset-distance:100%;opacity:0}}
   @keyframes m5{0%,50%{offset-distance:0%;opacity:0}52%{opacity:1}58%{offset-distance:100%;opacity:1}59%,100%{offset-distance:100%;opacity:0}}
   @keyframes m6{0%,60%{offset-distance:0%;opacity:0}61%{opacity:1}65%{offset-distance:100%;opacity:1}66%,100%{offset-distance:100%;opacity:0}}
   @keyframes m7{0%,66%{offset-distance:0%;opacity:0}67%{opacity:1}78%{offset-distance:100%;opacity:1}79%,100%{offset-distance:100%;opacity:0}}
@@ -345,16 +350,18 @@
 <div class="copy">
     <h2>The whole system</h2>
     <p class="lede">One loop. The playbook feeds the agents. The agents feed the playbook.</p>
-    <p>A cron starts the agents. They read the playbook, work through Barbara, and log every job. Exceptions become SOP updates, and leadership approves them in Slack.</p>
+    <p>A person or a cron starts the agents. They read the playbook, work through Barbara, and log every job. The brief comes back to the person. Exceptions become SOP updates, and leadership approves them in Slack.</p>
   </div>
   
 <figure style="--ar:2.0741" class="anim map" data-name="system">
     <button class="replay" type="button">Replay</button>
-    <div class="frame"><svg viewBox="0 0 1120 540" role="img" aria-label="The loop: cron starts the agents; agents read the SOP space, work through Barbara or, for tools Barbara lacks, with a key from the shared key ring; they log the work; exceptions go to a hook; the hook writes an SOP update; the leadership channel approves; the SOP space updates.">
+    <div class="frame"><svg viewBox="0 0 1120 540" role="img" aria-label="The loop: a person or a cron starts the agents; agents read the SOP space, work through Barbara or, for tools Barbara lacks, with a key from the shared key ring; they log the work; exceptions go to a hook; the hook writes an SOP update; the leadership channel approves; the SOP space updates.">
       <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--line2)"/></marker></defs>
 
       <!-- edges -->
+      <path class="e" d="M210 170 L322 238"/>
       <path class="e" d="M212 265 L322 265"/>
+      <path class="e" d="M322 460 L125 460 L125 313"/>
       <path class="e" d="M470 122 L470 216"/>
       <path class="e" d="M612 253 L692 253"/>
       <path class="e" d="M698 277 L618 277"/>
@@ -364,6 +371,9 @@
       <path class="e" d="M1030 418 L1030 128"/>
       <path class="e" d="M818 80 L618 80"/>
       <text class="m" x="484" y="174">reads</text>
+      <text class="m" x="266" y="256" text-anchor="middle">asks, answers</text>
+      <text class="m" x="240" y="452" text-anchor="middle">the brief</text>
+      <text class="m" x="250" y="188">starts</text>
       <text class="m" x="652" y="244" text-anchor="middle">asks</text>
       <text class="m" x="658" y="292" text-anchor="middle">answers</text>
       <text class="m" x="484" y="366">does</text>
@@ -392,9 +402,13 @@
       <text class="t" x="960" y="72" text-anchor="middle">Leadership channel in Slack</text>
       <text class="s" x="960" y="96" text-anchor="middle">approve, or send back with a note</text>
 
-      <rect class="n" x="40" y="225" width="170" height="80"/>
-      <text class="t" x="125" y="257" text-anchor="middle">Cron</text>
-      <text class="s" x="125" y="281" text-anchor="middle">every few hours</text>
+      <rect class="n" x="40" y="120" width="170" height="60"/>
+      <text class="t" x="125" y="145" text-anchor="middle">Cron</text>
+      <text class="s" x="125" y="167" text-anchor="middle">every few hours</text>
+
+      <rect class="n hu" x="40" y="225" width="170" height="80"/>
+      <text class="t" x="125" y="257" text-anchor="middle">People</text>
+      <text class="s" x="125" y="281" text-anchor="middle">Will and the team</text>
 
       <rect class="n ai" x="330" y="225" width="280" height="80"/>
       <text class="t" x="470" y="257" text-anchor="middle">Agents</text>
@@ -423,9 +437,10 @@
 
       <!-- dots -->
       <circle id="d1" class="dot" r="6"/><circle id="d2" class="dot" r="6"/><circle id="d3" class="dot" r="6"/><circle id="d3b" class="dot" r="6"/>
+      <circle id="p1" class="dot a" r="6"/><circle id="p2" class="dot" r="6"/><circle id="p3" class="dot a" r="6"/>
       <circle id="d4" class="dot" r="6"/><circle id="d5" class="dot" r="6"/><circle id="d6" class="dot" r="6"/><circle id="d7" class="dot" r="6"/><circle id="d8" class="dot a" r="6"/>
     </svg></div>
-    <figcaption>Follow the dot. Blue is the agents at work. It turns amber where a person approves, and the playbook flashes when the update lands.</figcaption>
+    <figcaption>Follow the dots. Blue is the agents at work. Amber is a person: asking, answering, approving. The playbook flashes when the update lands.</figcaption>
   </figure>
 
 </section>
