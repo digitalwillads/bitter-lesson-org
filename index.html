@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Loop</title>
+<meta name="description" content="How Digital Will runs the agency as one learning loop: agents do the work, log what falls outside the SOPs, propose the update, leadership approves in Slack. The Bitter Lesson, applied.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light;
+    --bg:#f6f7f5;--card:#ffffff;--ink:#14171c;--ink2:#4b5563;--muted:#7b8494;--line:#dfe3e8;--line2:#c9cfd6;
+    --blue:#2457d6;--blue-soft:#e8eefc;--amber:#c96a06;--amber-soft:#fbeedd;--grey:#6b7684;--grey-soft:#eceef1;
+    --good:#1f7a4d;--good-soft:#e6f4ec;--bad:#b3261e;
+    --focus:#2457d6;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --bg:#131517;--card:#1b1e22;--ink:#eef0f3;--ink2:#b5bcc7;--muted:#8a93a0;--line:#2b3037;--line2:#3a404a;
+      --blue:#5b8cff;--blue-soft:#1c2740;--amber:#cf7d12;--amber-soft:#3a2a12;--grey:#98a2ae;--grey-soft:#262a30;
+      --good:#4fbf82;--good-soft:#173125;--bad:#ef6b62;--focus:#5b8cff;
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#131517;--card:#1b1e22;--ink:#eef0f3;--ink2:#b5bcc7;--muted:#8a93a0;--line:#2b3037;--line2:#3a404a;
+    --blue:#5b8cff;--blue-soft:#1c2740;--amber:#cf7d12;--amber-soft:#3a2a12;--grey:#98a2ae;--grey-soft:#262a30;
+    --good:#4fbf82;--good-soft:#173125;--bad:#ef6b62;--focus:#5b8cff;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding:0 16px 96px;-webkit-font-smoothing:antialiased}
+  a{color:var(--blue)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:4px}
+  .wrap{max-width:1120px;margin:0 auto}
+
+  /* hero */
+  .hero{padding:64px 0 24px}
+  h1{font-size:clamp(34px,5.2vw,58px);line-height:1.04;letter-spacing:-.025em;font-weight:800;margin:0 0 22px;max-width:16ch}
+  .lead{font-size:clamp(18px,2vw,22px);line-height:1.45;max-width:58ch;margin:0 0 18px;text-wrap:pretty}
+  .src{font-size:15px;color:var(--ink2);margin:0 0 34px}
+  .key{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:var(--ink2);margin:0 0 30px}
+  .key span{display:inline-flex;align-items:center;gap:8px}
+  .key i{display:inline-block;width:12px;height:12px;border-radius:50%}
+  .key .b{background:var(--blue)}.key .a{background:var(--amber)}.key .g{background:var(--grey)}
+
+  /* scenes */
+  .scene{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:32px 48px;align-items:start;padding:64px 0 8px;border-top:1px solid var(--line)}
+  .scene.wide{grid-template-columns:1fr}
+  .scene.wide .copy{max-width:64ch}
+  @media (max-width:860px){.scene{grid-template-columns:1fr;gap:20px;padding-top:44px}}
+  h2{font-size:clamp(24px,3vw,32px);line-height:1.15;letter-spacing:-.02em;font-weight:700;margin:0 0 14px}
+  .copy p{margin:0 0 12px;max-width:52ch;text-wrap:pretty}
+  .copy .lede{font-weight:600;font-size:18px;color:var(--ink)}
+  .copy p:not(.lede){color:var(--ink2)}
+  .copy ol{margin:8px 0 0;padding-left:22px;color:var(--ink2)}
+  .copy li{margin:0 0 8px;max-width:52ch;text-wrap:pretty}
+  .copy li b{color:var(--ink);font-weight:600}
+
+  figure{margin:0;position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px;min-width:0}
+  .frame{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+  figure svg{display:block;width:100%;height:auto;min-width:var(--minw,560px);font-family:inherit}
+  figcaption{font-size:14px;color:var(--ink2);margin:10px 4px 0;text-wrap:pretty}
+  @media (max-width:640px){
+    .frame{position:relative}
+    .frame::after{content:"";position:absolute;top:0;right:0;bottom:0;width:40px;background:linear-gradient(to right,transparent,var(--card));pointer-events:none}
+    figcaption::before{content:"Swipe the picture sideways. ";color:var(--muted)}
+  }
+  .replay{position:absolute;top:10px;right:10px;z-index:2;font:inherit;font-size:13px;font-weight:500;color:var(--ink2);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 11px;cursor:pointer;opacity:0;transition:opacity .2s}
+  figure.played .replay{opacity:1}
+  .replay:hover{color:var(--ink);border-color:var(--line2)}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--ink2);margin:2px 4px 10px}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .legend i{display:inline-block;width:18px;height:0;border-top:2.5px solid var(--c);border-radius:2px}
+  .legend i.dash{border-top-style:dashed}
+
+  /* svg primitives */
+  svg text{fill:var(--ink)}
+  svg .t{font-size:15px;font-weight:600}
+  svg .s{font-size:12px;fill:var(--ink2)}
+  svg .m{font-size:12px;fill:var(--muted)}
+  svg .ax{stroke:var(--line2);stroke-width:1.5;fill:none}
+  svg .grid{stroke:var(--line);stroke-width:1;fill:none}
+  svg .n{fill:var(--card);stroke:var(--line2);stroke-width:1.5;rx:10}
+  svg .n.ai{stroke:var(--blue);fill:var(--blue-soft)}
+  svg .n.hu{stroke:var(--amber);fill:var(--amber-soft)}
+  svg .n.pa{stroke:var(--line2);fill:var(--grey-soft)}
+  svg .pill{fill:var(--card);stroke:var(--line2);stroke-width:1.2;rx:13}
+  svg .e{stroke:var(--line2);stroke-width:2;fill:none;marker-end:url(#arr)}
+  svg .e.dashed{stroke-dasharray:5 5;marker-end:url(#arr)}
+  svg .ln{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+  svg .ln.b{stroke:var(--blue)}svg .ln.g{stroke:var(--grey)}svg .ln.k{stroke:var(--ink)}svg .ln.a{stroke:var(--amber)}
+  svg .dot{fill:var(--blue);stroke:var(--card);stroke-width:2}
+  svg .dot.a{fill:var(--amber)}
+  svg .ring{fill:none;stroke:var(--blue);stroke-width:2;transform-box:fill-box;transform-origin:center}
+  svg .strike{text-decoration:line-through}
+
+  /* animation control: before play, animated bits are hidden only when JS runs */
+  .js figure.anim:not(.play) .a1,.js figure.anim:not(.play) .dot{opacity:0}
+  .js figure.anim:not(.play) .draw{stroke-dashoffset:1}
+  .draw{stroke-dasharray:1;stroke-dashoffset:0}
+  .play .draw{animation:draw var(--d,1.8s) cubic-bezier(.4,0,.2,1) var(--dl,0s) both}
+  .play .a1{animation:fade .5s ease var(--dl,0s) both}
+  .play .up{animation:rise .55s cubic-bezier(.2,.7,.2,1) var(--dl,0s) both}
+  @keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes pulse{0%{transform:scale(.3);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+  @keyframes glow{0%,100%{stroke-width:1.5}50%{stroke-width:4}}
+
+  /* scene 1: the lesson */
+  .play #cross{animation:pulse 1.6s ease-out 2.9s infinite}
+
+  /* scene 3: the map */
+  .map .dot{offset-rotate:0deg}
+  .play.map .dot{animation-duration:7s;animation-timing-function:linear;animation-iteration-count:infinite;animation-delay:.6s}
+  .play.map #d1{offset-path:path("M212 265 L318 265");animation-name:m1}
+  .play.map #d2{offset-path:path("M470 122 L470 214");animation-name:m1}
+  .play.map #d3{offset-path:path("M612 253 L690 253");animation-name:m3}
+  .play.map #d3b{offset-path:path("M698 277 L620 277");animation-name:m3b}
+  .play.map #d4{offset-path:path("M470 307 L470 410");animation-name:m4}
+  .play.map #d5{offset-path:path("M612 460 L690 460");animation-name:m5}
+  .play.map #d6{offset-path:path("M902 460 L950 460");animation-name:m6}
+  .play.map #d7{offset-path:path("M1030 418 L1030 130");animation-name:m7}
+  .play.map #d8{offset-path:path("M818 80 L620 80");animation-name:m8}
+  @keyframes m1{0%{offset-distance:0%;opacity:0}2%{opacity:1}12%{offset-distance:100%;opacity:1}13%,100%{offset-distance:100%;opacity:0}}
+  @keyframes m3{0%,14%{offset-distance:0%;opacity:0}16%{opacity:1}24%{offset-distance:100%;opacity:1}25%,100%{offset-distance:100%;opacity:0}}
+  @keyframes m3b{0%,26%{offset-distance:0%;opacity:0}28%{opacity:1}36%{offset-distance:100%;opacity:1}37%,100%{offset-distance:100%;opacity:0}}
+  @keyframes m4{0%,38%{offset-distance:0%;opacity:0}40%{opacity:1}48%{offset-distance:100%;opacity:1}49%,100%{offset-distance:100%;opacity:0}}
+  @keyframes m5{0%,50%{offset-distance:0%;opacity:0}52%{opacity:1}58%{offset-distance:100%;opacity:1}59%,100%{offset-distance:100%;opacity:0}}
+  @keyframes m6{0%,60%{offset-distance:0%;opacity:0}61%{opacity:1}65%{offset-distance:100%;opacity:1}66%,100%{offset-distance:100%;opacity:0}}
+  @keyframes m7{0%,66%{offset-distance:0%;opacity:0}67%{opacity:1}78%{offset-distance:100%;opacity:1}79%,100%{offset-distance:100%;opacity:0}}
+  @keyframes m8{0%,80%{offset-distance:0%;opacity:0}81%{opacity:1}90%{offset-distance:100%;opacity:1}91%,100%{offset-distance:100%;opacity:0}}
+  .play.map #sopring{animation:sop 7s linear .6s infinite}
+  @keyframes sop{0%,90%{transform:scale(1);opacity:0}91%{transform:scale(1);opacity:.9}100%{transform:scale(1.12);opacity:0}}
+
+  /* scene 4: the playbook */
+  .play #typed{animation:wipe 1.1s steps(28) .3s both}
+  @keyframes wipe{from{width:0}to{width:400px}}
+  .play #old{animation:strike .5s ease 2.2s both}
+  @keyframes strike{from{fill:var(--ink);text-decoration:none}to{fill:var(--muted);text-decoration:line-through}}
+  .play #newclip{animation:wipe2 1s steps(24) 2.5s both}
+  .play #v14{animation:fadeout .3s ease 3.6s both}
+  @keyframes fadeout{from{opacity:1}to{opacity:0}}
+  @keyframes wipe2{from{width:0}to{width:380px}}
+
+  /* scene 5: the gate */
+  .play #cursor{animation:cur 1.1s cubic-bezier(.4,0,.2,1) 1.1s both,fadeout .3s ease 2.5s both}
+  @keyframes cur{from{transform:translate(0,0)}to{transform:translate(-292px,-62px)}}
+  .play #ok{animation:fill 0.3s ease 2.25s both}
+  @keyframes fill{from{fill:var(--card)}to{fill:var(--amber)}}
+  .play #oktext{animation:tw .3s ease 2.25s both}
+  @keyframes tw{from{fill:var(--amber)}to{fill:#fff}}
+  .play #marker{animation:mk 3.2s cubic-bezier(.4,0,.2,1) 0s both}
+  @keyframes mk{0%,10%{transform:translateY(0)}60%,70%{transform:translateY(100px)}95%,100%{transform:translateY(200px)}}
+
+  /* scene 6: specialists */
+  .play #hard{animation:fade .5s ease .4s both,hardmove 1.2s cubic-bezier(.4,0,.2,1) 1.4s both}
+  @keyframes hardmove{from{transform:translate(0,0)}to{transform:translate(315px,-156px)}}
+  .play #spec1{animation:glow 1.2s ease 2.4s 2}
+  .play .sp{offset-rotate:0deg;animation:spoke 3s linear infinite;animation-delay:var(--dl,0s)}
+  @keyframes spoke{0%{offset-distance:0%;opacity:0}5%{opacity:1}45%{offset-distance:100%;opacity:1}50%,100%{offset-distance:100%;opacity:0}}
+  .play #s1{offset-path:path("M164 85 L245 190")}
+  .play #s2{offset-path:path("M164 165 L243 205")}
+  .play #s3{offset-path:path("M164 305 L243 240")}
+  .play #s4{offset-path:path("M164 385 L245 250")}
+
+  /* scene 7: rounds */
+  .play #rounddot{offset-path:path("M260 90 A170 170 0 1 1 259.99 90");offset-rotate:0deg;animation:once 6.4s linear .2s both}
+  @keyframes once{from{offset-distance:0%}to{offset-distance:100%}}
+  .v{opacity:0} #v0{opacity:1}
+  .play .v{animation:6.4s linear .2s both}
+  .play #v0{animation-name:v0}.play #v1{animation-name:v1}.play #v2{animation-name:v2}.play #v3{animation-name:v3}.play #v4{animation-name:v4}
+  @keyframes v0{0%,24%{opacity:1}25%,100%{opacity:0}}
+  @keyframes v1{0%,24%{opacity:0}25%,49%{opacity:1}50%,100%{opacity:0}}
+  @keyframes v2{0%,49%{opacity:0}50%,74%{opacity:1}75%,100%{opacity:0}}
+  @keyframes v3{0%,74%{opacity:0}75%,98%{opacity:1}99%,100%{opacity:0}}
+  @keyframes v4{0%,98%{opacity:0}99%,100%{opacity:1}}
+  .play .rp{animation:6.4s linear .2s both;transform-box:fill-box;transform-origin:center}
+  .play #r1{animation-name:rp1}.play #r2{animation-name:rp2}.play #r3{animation-name:rp3}.play #r4{animation-name:rp4}
+  @keyframes rp1{0%,22%{transform:scale(1)}26%{transform:scale(1.35)}30%,100%{transform:scale(1)}}
+  @keyframes rp2{0%,47%{transform:scale(1)}51%{transform:scale(1.35)}55%,100%{transform:scale(1)}}
+  @keyframes rp3{0%,72%{transform:scale(1)}76%{transform:scale(1.35)}80%,100%{transform:scale(1)}}
+  @keyframes rp4{0%,96%{transform:scale(1)}99%{transform:scale(1.35)}100%{transform:scale(1)}}
+
+  /* scene 8: people */
+  .play #trackdot{offset-path:path("M120 60 H560 A70 70 0 0 1 560 200 H120 A70 70 0 0 1 120 60 Z");offset-rotate:0deg;animation:loop 8s linear .2s infinite}
+  @keyframes loop{from{offset-distance:0%}to{offset-distance:100%}}
+  .play .tp{animation:8s linear .2s infinite;transform-box:fill-box;transform-origin:center}
+  .play #tp1{animation-name:tp1}.play #tp2{animation-name:tp2}.play #tp3{animation-name:tp3}
+  @keyframes tp1{0%,6%{transform:scale(1)}9%{transform:scale(1.3)}12%,100%{transform:scale(1)}}
+  @keyframes tp2{0%,39%{transform:scale(1)}42%{transform:scale(1.3)}45%,100%{transform:scale(1)}}
+  @keyframes tp3{0%,58%{transform:scale(1)}61%{transform:scale(1.3)}64%,100%{transform:scale(1)}}
+
+  table{border-collapse:collapse;width:100%;font-size:15px;margin:20px 0 0;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{font-weight:600;color:var(--ink2);font-size:14px;background:var(--grey-soft)}
+  tr:last-child td{border-bottom:0}
+  td:first-child{font-weight:600;white-space:nowrap}
+  td.hu{color:var(--amber);font-weight:600}
+  @media (max-width:640px){table{display:block;overflow-x:auto}}
+
+  .close{padding:64px 0 0;border-top:1px solid var(--line)}
+  .close ol{margin:0;padding-left:24px;font-size:18px;max-width:60ch}
+  .close li{margin:0 0 14px;text-wrap:pretty}
+  .close li b{font-weight:600}
+  blockquote{margin:44px 0 0;padding:0 0 0 18px;border-left:3px solid var(--amber);max-width:60ch;font-size:19px;line-height:1.45;color:var(--ink);text-wrap:pretty}
+  blockquote footer{font-size:15px;color:var(--ink2);margin-top:8px}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .play *{animation-duration:.01ms!important;animation-delay:0ms!important;animation-iteration-count:1!important}
+    .js figure.anim:not(.play) .a1,.js figure.anim:not(.play) .draw{opacity:1;stroke-dashoffset:0}
+    svg .dot,svg .sp,#trackdot,#rounddot{display:none}
+    .replay{display:none}
+  }
+</style>
+<noscript><style>.dot{display:none}</style></noscript>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>Run the agency the way the labs run AI.</h1>
+  <p class="lead">The Bitter Lesson: general methods that use more compute beat hand-built rules, every time, in the long run. So we stop hand-building the agency. We build one loop that does the work and rewrites its own playbook.</p>
+  <p class="src">Rich Sutton, <a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html" target="_blank" rel="noopener">The Bitter Lesson</a>, 2019. Six paragraphs. Read it once.</p>
+  <div class="key" aria-label="Color key"><span><i class="b"></i>the agents work</span><span><i class="a"></i>a person decides</span><span><i class="g"></i>the old way</span></div>
+</header>
+
+<!-- 1. the lesson -->
+<section class="scene" id="lesson">
+  <div class="copy">
+    <h2>The lesson</h2>
+    <p class="lede">Seventy years of AI. One pattern, four beats.</p>
+    <p>Researchers built their own knowledge into the machine. It helped at first. Then it flattened. Search and learning on more compute won in the end, by a lot.</p>
+  </div>
+  <figure class="anim" data-name="lesson">
+    <button class="replay" type="button">Replay</button>
+    <div class="legend"><span><i style="--c:var(--grey)"></i>rules we write by hand</span><span><i style="--c:var(--blue)"></i>general methods + more compute</span></div>
+    <div class="frame"><svg viewBox="0 0 760 440" role="img" aria-label="Two curves over time. Hand-written rules rise fast and flatten. General methods start lower, cross over, and keep climbing.">
+      <path class="ax" d="M70 40 V380 H730"/>
+      <text class="m" x="70" y="28">results</text>
+      <text class="m" x="730" y="404" text-anchor="end">time</text>
+      <path class="ln g draw" style="--d:1.7s" pathLength="1" d="M70 360 C150 335 210 215 300 205 C380 196 560 190 730 190"/>
+      <path class="ln b draw" style="--d:2.6s;--dl:.4s" pathLength="1" d="M70 372 C250 366 330 300 420 212 C500 130 620 80 730 50"/>
+      <circle id="cross" class="ring" cx="447" cy="195" r="14" style="opacity:0"/>
+      <g class="a1 up" style="--dl:.7s"><text class="s" x="95" y="318" style="fill:var(--ink)">1. We build in what we know</text></g>
+      <g class="a1 up" style="--dl:1.3s"><text class="s" x="212" y="192" style="fill:var(--ink)">2. It helps at first</text></g>
+      <g class="a1 up" style="--dl:2.0s"><text class="s" x="590" y="216" style="fill:var(--ink)">3. Then it flattens</text></g>
+      <g class="a1 up" style="--dl:2.9s"><text class="t" x="726" y="34" text-anchor="end" style="fill:var(--blue)">4. The general method wins</text></g>
+    </svg></div>
+    <figcaption>Chess, Go, speech, vision. The same four beats each time.</figcaption>
+  </figure>
+</section>
+
+<!-- 2. what it means for us -->
+<section class="scene" id="meaning">
+  <div class="copy">
+    <h2>What it means for us</h2>
+    <p class="lede">Do not build our know-how into the machine. Build the machine that finds it.</p>
+    <p>Every rebuild takes the system offline for weeks. A loop never goes offline. It gets one line better each round.</p>
+  </div>
+  <figure class="anim" data-name="meaning">
+    <button class="replay" type="button">Replay</button>
+    <div class="frame"><svg viewBox="0 0 760 440" role="img" aria-label="Top: a sawtooth line that rises, drops to offline, and restarts, four times. Bottom: a staircase that rises steadily.">
+      <text class="t" x="40" y="34" style="fill:var(--grey)">Rebuild it every few weeks</text>
+      <path class="ax" d="M40 190 H730"/>
+      <path class="ln g draw" style="--d:2.6s" pathLength="1" d="M40 190 L100 130 L170 124 L200 118 L200 190 M235 190 L300 112 L370 106 L400 100 L400 190 M435 190 L500 94 L570 88 L600 82 L600 190 M635 190 L700 76 L730 72"/>
+      <g class="a1" style="--dl:.7s"><path class="ax" style="stroke:var(--bad);stroke-dasharray:3 4" d="M202 190 H233"/><text class="m" x="217" y="208" text-anchor="middle" style="fill:var(--bad)">offline</text></g>
+      <g class="a1" style="--dl:1.4s"><path class="ax" style="stroke:var(--bad);stroke-dasharray:3 4" d="M402 190 H433"/><text class="m" x="417" y="208" text-anchor="middle" style="fill:var(--bad)">offline</text></g>
+      <g class="a1" style="--dl:2.1s"><path class="ax" style="stroke:var(--bad);stroke-dasharray:3 4" d="M602 190 H633"/><text class="m" x="617" y="208" text-anchor="middle" style="fill:var(--bad)">offline</text></g>
+      <g class="a1" style="--dl:.5s"><text class="m" x="170" y="112" text-anchor="middle">v1</text></g>
+      <g class="a1" style="--dl:1.2s"><text class="m" x="370" y="94" text-anchor="middle">v2</text></g>
+      <g class="a1" style="--dl:1.9s"><text class="m" x="570" y="76" text-anchor="middle">v3</text></g>
+      <g class="a1" style="--dl:2.5s"><text class="m" x="715" y="60" text-anchor="middle">v4</text></g>
+
+      <text class="t" x="40" y="246" style="fill:var(--blue)">One loop that compounds</text>
+      <path class="ax" d="M40 400 H730"/>
+      <path class="ln b draw" style="--d:2.6s;--dl:.2s" pathLength="1" d="M40 392 H63 V385.5 H86 V379.0 H109 V372.5 H132 V366.0 H155 V359.5 H178 V353.0 H201 V346.5 H224 V340.0 H247 V333.5 H270 V327.0 H293 V320.5 H316 V314.0 H339 V307.5 H362 V301.0 H385 V294.5 H408 V288.0 H431 V281.5 H454 V275.0 H477 V268.5 H500 V262.0 H523 V255.5 H546 V249.0 H569 V242.5 H592 V236.0 H615 V229.5 H638 V223.0 H661 V216.5 H684 V210.0 H707 V203.5 H730 V197.0"/>
+      <g class="a1" style="--dl:.9s"><text class="m" x="132" y="352">+1 line</text></g>
+      <g class="a1" style="--dl:1.6s"><text class="m" x="339" y="294">+1 line</text></g>
+      <g class="a1" style="--dl:2.3s"><text class="m" x="546" y="236">+1 line</text></g>
+      <g class="a1" style="--dl:2.9s"><text class="m" x="730" y="188" text-anchor="end">never offline</text></g>
+      <text class="m" x="40" y="428">week 1</text>
+      <text class="m" x="730" y="428" text-anchor="end">week 12</text>
+    </svg></div>
+    <figcaption>Same twelve weeks. The loop is ahead by week four and never falls back.</figcaption>
+  </figure>
+</section>
+
+<!-- 3. the whole system -->
+<section class="scene wide" id="system">
+  <div class="copy">
+    <h2>The whole system</h2>
+    <p class="lede">One loop. The playbook feeds the agents. The agents feed the playbook.</p>
+    <p>A cron starts the agents. They read the playbook, work through Barbara, and log every job. Exceptions become SOP updates, and leadership approves them in Slack.</p>
+  </div>
+  <figure class="anim map" data-name="system" style="--minw:960px">
+    <button class="replay" type="button">Replay</button>
+    <div class="frame"><svg viewBox="0 0 1120 540" role="img" aria-label="The loop: cron starts the agents; agents read the SOP space, work through Barbara, log the work; exceptions go to a hook; the hook writes an SOP update; the leadership channel approves; the SOP space updates.">
+      <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--line2)"/></marker></defs>
+
+      <!-- edges -->
+      <path class="e" d="M212 265 L322 265"/>
+      <path class="e" d="M470 122 L470 216"/>
+      <path class="e" d="M612 253 L692 253"/>
+      <path class="e" d="M698 277 L618 277"/>
+      <path class="e" d="M470 307 L470 412"/>
+      <path class="e" d="M612 460 L692 460"/>
+      <path class="e" d="M902 460 L952 460"/>
+      <path class="e" d="M1030 418 L1030 128"/>
+      <path class="e" d="M818 80 L618 80"/>
+      <text class="m" x="484" y="174">reads</text>
+      <text class="m" x="652" y="244" text-anchor="middle">asks</text>
+      <text class="m" x="658" y="292" text-anchor="middle">answers</text>
+      <text class="m" x="484" y="366">does</text>
+      <text class="m" x="652" y="480" text-anchor="middle">logs</text>
+      <text class="m" x="1044" y="278">proposes</text>
+      <text class="m" x="718" y="70" text-anchor="middle">approved</text>
+
+      <!-- satellites: what Barbara reaches -->
+      <g>
+        <path class="grid" d="M800 225 L591 188 M800 225 L658 188 M800 225 L732 188 M800 225 L805 188 M800 225 L884 188 M800 225 L965 188"/>
+        <rect class="pill" x="560" y="160" width="62" height="26"/><text class="s" x="591" y="177" text-anchor="middle">clients</text>
+        <rect class="pill" x="632" y="160" width="52" height="26"/><text class="s" x="658" y="177" text-anchor="middle">email</text>
+        <rect class="pill" x="694" y="160" width="76" height="26"/><text class="s" x="732" y="177" text-anchor="middle">meetings</text>
+        <rect class="pill" x="780" y="160" width="50" height="26"/><text class="s" x="805" y="177" text-anchor="middle">tasks</text>
+        <rect class="pill" x="840" y="160" width="88" height="26"/><text class="s" x="884" y="177" text-anchor="middle">ad accounts</text>
+        <rect class="pill" x="938" y="160" width="54" height="26"/><text class="s" x="965" y="177" text-anchor="middle">Slack</text>
+      </g>
+
+      <!-- nodes -->
+      <rect class="n pa" x="330" y="40" width="280" height="80"/>
+      <rect id="sopring" class="ring" x="330" y="40" width="280" height="80" rx="10" style="opacity:0;stroke:var(--amber);stroke-width:3"/>
+      <text class="t" x="470" y="72" text-anchor="middle">The SOP space</text>
+      <text class="s" x="470" y="96" text-anchor="middle">one MD per SOP, one MD per client</text>
+
+      <rect class="n hu" x="820" y="40" width="280" height="80"/>
+      <text class="t" x="960" y="72" text-anchor="middle">Leadership channel in Slack</text>
+      <text class="s" x="960" y="96" text-anchor="middle">approve, or send back with a note</text>
+
+      <rect class="n" x="40" y="225" width="170" height="80"/>
+      <text class="t" x="125" y="257" text-anchor="middle">Cron</text>
+      <text class="s" x="125" y="281" text-anchor="middle">every few hours</text>
+
+      <rect class="n ai" x="330" y="225" width="280" height="80"/>
+      <text class="t" x="470" y="257" text-anchor="middle">Agents</text>
+      <text class="s" x="470" y="281" text-anchor="middle">Claude Code, one CMUX tab per job</text>
+
+      <rect class="n ai" x="700" y="225" width="200" height="80"/>
+      <text class="t" x="800" y="257" text-anchor="middle">Barbara</text>
+      <text class="s" x="800" y="281" text-anchor="middle">the hub</text>
+
+      <rect class="n" x="330" y="420" width="280" height="80"/>
+      <text class="t" x="470" y="452" text-anchor="middle">Work, done and logged</text>
+      <text class="s" x="470" y="476" text-anchor="middle">briefs, reports, pushes, replies</text>
+
+      <rect class="n" x="700" y="420" width="200" height="80"/>
+      <text class="t" x="800" y="452" text-anchor="middle">Exceptions</text>
+      <text class="s" x="800" y="476" text-anchor="middle">anything outside an SOP</text>
+
+      <rect class="n ai" x="960" y="420" width="140" height="80"/>
+      <text class="t" x="1030" y="452" text-anchor="middle">Hook</text>
+      <text class="s" x="1030" y="476" text-anchor="middle">writes the SOP update</text>
+
+      <!-- dots -->
+      <circle id="d1" class="dot" r="6"/><circle id="d2" class="dot" r="6"/><circle id="d3" class="dot" r="6"/><circle id="d3b" class="dot" r="6"/>
+      <circle id="d4" class="dot" r="6"/><circle id="d5" class="dot" r="6"/><circle id="d6" class="dot" r="6"/><circle id="d7" class="dot" r="6"/><circle id="d8" class="dot a" r="6"/>
+    </svg></div>
+    <figcaption>Follow the dot. Blue is the agents at work. It turns amber where a person approves, and the playbook flashes when the update lands.</figcaption>
+  </figure>
+</section>
+
+<!-- 4. the playbook -->
+<section class="scene" id="playbook">
+  <div class="copy">
+    <h2>The playbook</h2>
+    <p class="lede">Plain text files. One per SOP. One per client.</p>
+    <p>The agents read them before every job. When a job falls outside them, the agent writes one line to the exceptions log. The hook turns that line into a change to the file.</p>
+  </div>
+  <figure class="anim" data-name="playbook">
+    <button class="replay" type="button">Replay</button>
+    <div class="frame"><svg viewBox="0 0 760 440" role="img" aria-label="A folder tree of SOP and client text files. A new line lands in the exceptions log. The hook changes one line in conversion-tracking.md and the version goes from 14 to 15.">
+      <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--line2)"/></marker></defs>
+      <!-- tree -->
+      <text class="t" x="40" y="52">playbook/</text>
+      <text class="s" x="58" y="78">sops/</text>
+      <text class="s" x="76" y="102">onboarding.md</text>
+      <text class="s" x="76" y="124">daily-brief.md</text>
+      <text class="s" x="76" y="146">negatives.md</text>
+      <rect class="a1" style="--dl:1.6s;fill:var(--blue-soft)" x="68" y="152" width="200" height="24" rx="6"/>
+      <text class="s" x="76" y="168" style="fill:var(--ink)">conversion-tracking.md</text>
+      <text class="s" x="76" y="190">reporting.md</text>
+      <text class="s" x="58" y="218">clients/</text>
+      <text class="s" x="76" y="242">aafe.md</text>
+      <text class="s" x="76" y="264">flexan.md</text>
+      <text class="s" x="76" y="286">welch.md</text>
+      <text class="m" x="76" y="308">and one per client</text>
+      <rect class="a1" style="--dl:.2s;fill:var(--amber-soft)" x="50" y="322" width="140" height="24" rx="6"/>
+      <text class="s" x="58" y="338" style="fill:var(--ink)">exceptions.log</text>
+
+      <!-- SOP file -->
+      <rect class="n" x="300" y="40" width="440" height="222"/>
+      <path class="grid" d="M300 74 H740"/>
+      <text class="s" x="316" y="62" style="fill:var(--ink);font-weight:600">conversion-tracking.md</text>
+      <g class="a1" style="--dl:3.6s"><rect x="676" y="47" width="50" height="20" rx="10" style="fill:var(--good-soft)"/><text class="s" x="701" y="61" text-anchor="middle" style="fill:var(--good);font-weight:600">v15</text></g>
+      <g id="v14"><rect x="676" y="47" width="50" height="20" rx="10" style="fill:var(--grey-soft)"/><text class="s" x="701" y="61" text-anchor="middle" style="fill:var(--ink2);font-weight:600">v14</text></g>
+      <text class="s" x="316" y="102" style="fill:var(--ink)">1. Build the GA4 key event.</text>
+      <text class="s" x="316" y="128" style="fill:var(--ink)">2. Import it into Google Ads.</text>
+      <text id="old" class="s" x="316" y="154" style="fill:var(--ink)">3. Enable it when the tag is live.</text>
+      <clipPath id="newclipp"><rect id="newclip" x="300" y="164" width="380" height="26"/></clipPath>
+      <g clip-path="url(#newclipp)"><text class="s" x="316" y="180" style="fill:var(--blue);font-weight:600">3. Enable it only after the key event fires once.</text></g>
+      <text class="s" x="316" y="206" style="fill:var(--ink)">4. Verify in Google Ads the next day.</text>
+      <text class="m" x="316" y="244">the hook changed one line</text>
+
+      <!-- hook arrow -->
+      <g class="a1" style="--dl:1.6s">
+        <path class="e" d="M520 300 V270" style="marker-end:url(#arr2)"/>
+        <text class="m" x="530" y="290">hook</text>
+      </g>
+
+      <!-- exceptions -->
+      <rect class="n" x="300" y="300" width="440" height="110"/>
+      <path class="grid" d="M300 334 H740"/>
+      <text class="s" x="316" y="322" style="fill:var(--ink);font-weight:600">exceptions.log</text>
+      <text class="m" x="316" y="356">09-14  welch   negatives list had no owner</text>
+      <text class="m" x="316" y="374">09-15  adi     report sent before the brief</text>
+      <clipPath id="typedp"><rect id="typed" x="300" y="380" width="400" height="24"/></clipPath>
+      <g clip-path="url(#typedp)"><text class="s" x="316" y="396" style="fill:var(--ink)">09-16  flexan  enabled before the key event fired</text></g>
+    </svg></div>
+    <figcaption>One exception in. One line changed. Version 14 becomes 15.</figcaption>
+  </figure>
+</section>
+
+<!-- 5. the approval gate -->
+<section class="scene" id="gate">
+  <div class="copy">
+    <h2>The approval gate</h2>
+    <p class="lede">People approve the rules, not the work.</p>
+    <p>The proposal lands in the leadership channel. Approve, and it is live in the next round. Send it back with a note, and the note goes into the next proposal.</p>
+  </div>
+  <figure class="anim" data-name="gate">
+    <button class="replay" type="button">Replay</button>
+    <div class="frame"><svg viewBox="0 0 760 440" role="img" aria-label="A message in the leadership channel with a one-line SOP change and two buttons. A cursor presses Approve. On the right, a marker moves from proposed to approved to live.">
+      <!-- card -->
+      <g class="a1 up" style="--dl:.1s">
+        <rect class="n" x="40" y="40" width="440" height="330" rx="14"/>
+        <text class="m" x="60" y="68">#leadership</text>
+        <text class="s" x="60" y="94" style="fill:var(--ink);font-weight:600">Playbook</text>
+        <text class="m" x="128" y="94">7:05 AM</text>
+        <text class="t" x="60" y="124">SOP update: conversion-tracking.md</text>
+        <text class="s strike" x="60" y="154" style="fill:var(--muted)">– Enable it when the tag is live.</text>
+        <text class="s" x="60" y="178" style="fill:var(--blue);font-weight:600">+ Enable it only after the key event fires once.</text>
+        <text class="s" x="60" y="212" style="fill:var(--ink)">Why: 3 exceptions this week.</text>
+        <rect id="ok" x="60" y="248" width="124" height="40" rx="8" style="fill:var(--card);stroke:var(--amber);stroke-width:1.5"/>
+        <text id="oktext" class="s" x="122" y="273" text-anchor="middle" style="fill:var(--amber);font-weight:600;font-size:14px">Approve</text>
+        <rect x="200" y="248" width="124" height="40" rx="8" style="fill:var(--card);stroke:var(--line2);stroke-width:1.5"/>
+        <text class="s" x="262" y="273" text-anchor="middle" style="fill:var(--ink2);font-weight:600;font-size:14px">Send back</text>
+      </g>
+      <g class="a1" style="--dl:2.6s"><text class="s" x="60" y="336" style="fill:var(--good);font-weight:600">Approved by Will. Live in the next round.</text></g>
+      <circle id="cursor" class="dot a" cx="414" cy="330" r="7" style="stroke:var(--card)"/>
+
+      <!-- states -->
+      <path class="ax" d="M630 110 V310"/>
+      <circle cx="630" cy="110" r="7" style="fill:var(--card);stroke:var(--line2);stroke-width:2"/>
+      <circle cx="630" cy="210" r="7" style="fill:var(--card);stroke:var(--line2);stroke-width:2"/>
+      <circle cx="630" cy="310" r="7" style="fill:var(--card);stroke:var(--line2);stroke-width:2"/>
+      <text class="t" x="652" y="115">Proposed</text>
+      <text class="t" x="652" y="215">Approved</text>
+      <text class="t" x="652" y="315">Live</text>
+      <text class="m" x="652" y="335">next round</text>
+      <circle id="marker" class="dot a" cx="630" cy="110" r="9"/>
+      <path class="e dashed" d="M616 110 H528"/>
+      <text class="m" x="616" y="96" text-anchor="end">or sent back</text>
+      <text class="m" x="616" y="132" text-anchor="end">with a note</text>
+    </svg></div>
+    <figcaption>One tap in Slack. No meeting. The change is live on the next round.</figcaption>
+  </figure>
+</section>
+
+<!-- 6. specialists -->
+<section class="scene" id="specialists">
+  <div class="copy">
+    <h2>Specialists for hard jobs</h2>
+    <p class="lede">One general agent for routine work. A named specialist for each hard job.</p>
+    <p>A specialist has its own tools, its own SOPs and its own tests. Conversion tracking is the first. Ads pushes and client reports come next.</p>
+  </div>
+  <figure class="anim" data-name="specialists">
+    <button class="replay" type="button">Replay</button>
+    <div class="frame"><svg viewBox="0 0 760 440" role="img" aria-label="Routine jobs feed one general agent. A hard job, set up tracking for a new client, moves to the conversion tracking specialist, which lights up.">
+      <!-- routine spokes -->
+      <path class="grid" d="M164 85 L245 190 M164 165 L243 205 M164 305 L243 240 M164 385 L245 250"/>
+      <rect class="pill" x="40" y="70" width="124" height="30"/><text class="s" x="102" y="89" text-anchor="middle">daily pull</text>
+      <rect class="pill" x="40" y="150" width="124" height="30"/><text class="s" x="102" y="169" text-anchor="middle">client briefs</text>
+      <rect class="pill" x="40" y="290" width="124" height="30"/><text class="s" x="102" y="309" text-anchor="middle">email replies</text>
+      <rect class="pill" x="40" y="370" width="124" height="30"/><text class="s" x="102" y="389" text-anchor="middle">weekly numbers</text>
+      <circle id="s1" class="dot sp" r="5" style="--dl:0s"/><circle id="s2" class="dot sp" r="5" style="--dl:.7s"/><circle id="s3" class="dot sp" r="5" style="--dl:1.4s"/><circle id="s4" class="dot sp" r="5" style="--dl:2.1s"/>
+
+      <!-- general agent -->
+      <circle cx="300" cy="220" r="58" style="fill:var(--blue-soft);stroke:var(--blue);stroke-width:1.5"/>
+      <text class="t" x="300" y="216" text-anchor="middle">General</text>
+      <text class="t" x="300" y="236" text-anchor="middle">agent</text>
+
+      <!-- specialist spokes -->
+      <path class="grid" d="M358 220 L500 98 M358 220 L500 220 M358 220 L500 332"/>
+
+      <!-- specialists -->
+      <rect id="spec1" class="n ai" x="500" y="60" width="230" height="76"/>
+      <text class="t" x="516" y="88">Conversion tracking</text>
+      <text class="s" x="516" y="110">GA4, GTM, Google Ads. Own SOPs.</text>
+      <rect class="n" x="500" y="182" width="230" height="76"/>
+      <text class="t" x="516" y="210">Ads pushes</text>
+      <text class="s" x="516" y="232">Google Ads API, Meta. Own SOPs.</text>
+      <rect class="n" x="500" y="294" width="230" height="76"/>
+      <text class="t" x="516" y="322">Client reports</text>
+      <text class="s" x="516" y="344">numbers, charts, pages. Own SOPs.</text>
+
+      <!-- hard job token -->
+      <g id="hard" class="a1" style="--dl:.4s">
+        <rect x="224" y="300" width="152" height="30" rx="15" style="fill:var(--card);stroke:var(--blue);stroke-width:1.5"/>
+        <text class="s" x="300" y="319" text-anchor="middle" style="fill:var(--ink)">new client: set up tracking</text>
+      </g>
+      <g class="a1" style="--dl:2.7s"><text class="m" x="615" y="48" text-anchor="middle" style="fill:var(--blue)">handed to the specialist</text></g>
+    </svg></div>
+    <figcaption>Routine jobs stay with the general agent. The hard one moves to the specialist that owns it.</figcaption>
+  </figure>
+</section>
+
+<!-- 7. rounds -->
+<section class="scene" id="rounds">
+  <div class="copy">
+    <h2>Rounds, not releases</h2>
+    <p class="lede">Several rounds a day. Each round can change the playbook by one line.</p>
+    <p>A round is small: pull, work, log, propose. Nothing waits for a big release.</p>
+  </div>
+  <figure class="anim" data-name="rounds" style="--minw:420px">
+    <button class="replay" type="button">Replay</button>
+    <div class="frame"><svg viewBox="0 0 520 520" role="img" aria-label="A ring with four rounds in a day. A dot travels the ring. The playbook version in the center goes from 41 to 45.">
+      <circle cx="260" cy="260" r="170" style="fill:none;stroke:var(--line2);stroke-width:2"/>
+      <!-- step labels on the first quarter -->
+      <text class="m" x="291" y="115" text-anchor="middle" transform="rotate(12 291 115)">pull</text>
+      <text class="m" x="343" y="137" text-anchor="middle" transform="rotate(34 343 137)">work</text>
+      <text class="m" x="384" y="177" text-anchor="middle" transform="rotate(56 384 177)">log</text>
+      <text class="m" x="406" y="229" text-anchor="middle" transform="rotate(78 406 229)">propose</text>
+      <!-- round markers -->
+      <g id="r1" class="rp"><circle cx="260" cy="90" r="11" style="fill:var(--card);stroke:var(--blue);stroke-width:2.5"/></g>
+      <g id="r2" class="rp"><circle cx="430" cy="260" r="11" style="fill:var(--card);stroke:var(--blue);stroke-width:2.5"/></g>
+      <g id="r3" class="rp"><circle cx="260" cy="430" r="11" style="fill:var(--card);stroke:var(--blue);stroke-width:2.5"/></g>
+      <g id="r4" class="rp"><circle cx="90" cy="260" r="11" style="fill:var(--card);stroke:var(--blue);stroke-width:2.5"/></g>
+      <text class="s" x="260" y="62" text-anchor="middle">5:00</text>
+      <text class="s" x="470" y="265">10:00</text>
+      <text class="s" x="260" y="468" text-anchor="middle">14:00</text>
+      <text class="s" x="50" y="265" text-anchor="end">18:00</text>
+      <!-- center -->
+      <text class="m" x="260" y="228" text-anchor="middle">playbook</text>
+      <g class="v" id="v0"><text x="260" y="286" text-anchor="middle" style="font-size:56px;font-weight:800;letter-spacing:-.03em">v41</text></g>
+      <g class="v" id="v1"><text x="260" y="286" text-anchor="middle" style="font-size:56px;font-weight:800;letter-spacing:-.03em">v42</text></g>
+      <g class="v" id="v2"><text x="260" y="286" text-anchor="middle" style="font-size:56px;font-weight:800;letter-spacing:-.03em">v43</text></g>
+      <g class="v" id="v3"><text x="260" y="286" text-anchor="middle" style="font-size:56px;font-weight:800;letter-spacing:-.03em">v44</text></g>
+      <g class="v" id="v4"><text x="260" y="286" text-anchor="middle" style="font-size:56px;font-weight:800;letter-spacing:-.03em">v45</text></g>
+      <text class="m" x="260" y="316" text-anchor="middle">four rounds today</text>
+      <circle id="rounddot" class="dot" r="7"/>
+    </svg></div>
+    <figcaption>One day. Four rounds. Four small changes, each one approved.</figcaption>
+  </figure>
+</section>
+
+<!-- 8. people -->
+<section class="scene wide" id="people">
+  <div class="copy">
+    <h2>Where people sit</h2>
+    <p class="lede">Your time goes to judgment, not to waiting.</p>
+    <p>The agents run the loop. People touch it in three places.</p>
+  </div>
+  <figure class="anim" data-name="people" style="--minw:640px">
+    <button class="replay" type="button">Replay</button>
+    <div class="frame"><svg viewBox="0 0 760 270" role="img" aria-label="A loop track. A blue dot runs around it. Three amber points on the track: answer the brief, approve SOP updates, talk to the client.">
+      <path d="M120 60 H560 A70 70 0 0 1 560 200 H120 A70 70 0 0 1 120 60 Z" style="fill:none;stroke:var(--line2);stroke-width:2"/>
+      <g id="tp1" class="tp"><circle cx="240" cy="60" r="14" style="fill:var(--amber-soft);stroke:var(--amber);stroke-width:2"/></g>
+      <g id="tp2" class="tp"><circle cx="630" cy="130" r="14" style="fill:var(--amber-soft);stroke:var(--amber);stroke-width:2"/></g>
+      <g id="tp3" class="tp"><circle cx="420" cy="200" r="14" style="fill:var(--amber-soft);stroke:var(--amber);stroke-width:2"/></g>
+      <text class="s" x="240" y="34" text-anchor="middle" style="fill:var(--ink);font-weight:600">answer the brief</text>
+      <text class="m" x="240" y="16" text-anchor="middle">account manager</text>
+      <text class="s" x="654" y="126" style="fill:var(--ink);font-weight:600">approve</text>
+      <text class="s" x="654" y="142" style="fill:var(--ink);font-weight:600">SOP updates</text>
+      <text class="m" x="654" y="160">leadership</text>
+      <text class="s" x="420" y="238" text-anchor="middle" style="fill:var(--ink);font-weight:600">talk to the client</text>
+      <text class="m" x="420" y="256" text-anchor="middle">account manager</text>
+      <text class="s" x="340" y="118" text-anchor="middle" style="fill:var(--blue);font-weight:600">the agents do the rest</text>
+      <text class="m" x="340" y="138" text-anchor="middle">pull, numbers, drafts, reports, negatives, logs</text>
+      <circle id="trackdot" class="dot" r="7"/>
+    </svg></div>
+  </figure>
+  <table style="grid-column:1/-1">
+    <thead><tr><th>Who</th><th>Decides</th><th>Leaves to the agents</th></tr></thead>
+    <tbody>
+      <tr><td class="hu">Will</td><td>budgets, every outward send, the rules</td><td>the pull, the numbers, the drafts</td></tr>
+      <tr><td class="hu">Leadership</td><td>SOP updates, in Slack</td><td>writing the SOP</td></tr>
+      <tr><td class="hu">Account managers</td><td>the answer boxes on each brief, the client call</td><td>reports, search terms, negatives</td></tr>
+      <tr><td class="hu">Everyone</td><td>flags a wrong number or a bad rule</td><td>rebuilding the system</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 9. why it compounds -->
+<section class="scene" id="compounds">
+  <div class="copy">
+    <h2>Why it compounds</h2>
+    <p class="lede">Our layer is text files and loops, not custom code.</p>
+    <p>The labs ship a better model every few months. The new model reads the same playbook on day one. The whole agency gets better the same day, for free.</p>
+  </div>
+  <figure class="anim" data-name="compounds">
+    <button class="replay" type="button">Replay</button>
+    <div class="legend"><span><i style="--c:var(--ink)"></i>the labs' models</span><span><i style="--c:var(--blue)"></i>our agency, same day</span><span><i style="--c:var(--grey)"></i>custom code, frozen at build</span></div>
+    <div class="frame"><svg viewBox="0 0 760 420" role="img" aria-label="A staircase for model releases rising over time. Our agency rises with each step, one day behind. Custom code rises once and stays flat.">
+      <path class="ax" d="M70 40 V370 H730"/>
+      <text class="m" x="70" y="28">results</text>
+      <text class="m" x="730" y="394" text-anchor="end">time</text>
+      <path class="ln g draw" style="--d:1.2s" pathLength="1" d="M70 352 L200 300 H730"/>
+      <path class="ln k draw" style="--d:2.6s;--dl:.3s" pathLength="1" d="M70 330 H175 V290 H285 V245 H395 V195 H505 V150 H615 V105 H725 V60"/>
+      <path class="ln b draw" style="--d:2.6s;--dl:.6s" pathLength="1" d="M70 344 H187 V304 H297 V259 H407 V209 H517 V164 H627 V119 H730"/>
+      <g class="a1" style="--dl:1.0s"><text class="m" x="181" y="278" text-anchor="middle">new model</text></g>
+      <g class="a1" style="--dl:1.7s"><text class="m" x="401" y="183" text-anchor="middle">new model</text></g>
+      <g class="a1" style="--dl:2.4s"><text class="m" x="621" y="93" text-anchor="middle">new model</text></g>
+      <g class="a1" style="--dl:1.4s"><text class="s" x="726" y="292" text-anchor="end" style="fill:var(--grey)">frozen the day we built it</text></g>
+      <g class="a1" style="--dl:3.1s"><text class="s" x="726" y="184" text-anchor="end" style="fill:var(--blue);font-weight:600">rides every release</text></g>
+    </svg></div>
+    <figcaption>What the labs do will always be more than we can do. We ride it instead of racing it.</figcaption>
+  </figure>
+</section>
+
+<!-- 10. what we set up -->
+<section class="close" id="setup">
+  <h2>What we set up</h2>
+  <ol>
+    <li><b>Everyone works in Claude Code inside CMUX.</b> Barbara is the hub for clients, email, meetings, tasks and Slack.</li>
+    <li><b>One playbook folder.</b> One MD per SOP. One MD per client. One exceptions log.</li>
+    <li><b>The hook and the leadership channel.</b> Exceptions in. SOP updates out. Approved in Slack. Live on the next round.</li>
+  </ol>
+  <blockquote>We want AI agents that can discover like we can, not which contain what we have discovered.<footer>Rich Sutton, The Bitter Lesson</footer></blockquote>
+</section>
+
+</div>
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  var t0 = performance.now();
+  var figs = document.querySelectorAll('figure.anim');
+  console.log('[loop] init', figs.length, 'scenes');
+
+  function play(f, why){
+    f.classList.remove('play');
+    void f.offsetWidth; // restart every animation
+    f.classList.add('play');
+    f.classList.add('played');
+    console.log('[loop] play', f.dataset.name, why, Math.round(performance.now()-t0)+'ms');
+  }
+
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ play(e.target, 'scroll'); io.unobserve(e.target); }
+      });
+    }, {threshold:.4});
+    figs.forEach(function(f){ io.observe(f); });
+  } else {
+    figs.forEach(function(f){ play(f, 'no-observer'); });
+  }
+
+  figs.forEach(function(f){
+    var b = f.querySelector('.replay');
+    if (b) b.addEventListener('click', function(){ play(f, 'replay'); });
+  });
+})();
+</script>
+</body>
+</html>
